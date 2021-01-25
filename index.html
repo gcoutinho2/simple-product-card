@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Card - 2020</title>
+    <link rel="stylesheet/scss" type="text/css" href="styles.scss" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/sass.js/0.6.3/sass.min.js"></script>
+    <script>
+      (async () => {
+        let buffer = '';
+
+        const fullCode = (
+          await Promise.all(
+            [...document.querySelectorAll('link')]
+              .filter((l) => l.rel === 'stylesheet/scss')
+              .map(async (l) => {
+                url = l.href;
+                return await (await fetch(url)).text();
+              })
+          )
+        ).join('\n');
+
+        const basename = 'tmp.scss';
+        Sass.writeFile(basename, fullCode);
+        const compiled = await Sass.compile(`@import "${basename}"; `);
+
+        document.head.innerHTML += `<style>${compiled}</style>`;
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="card">
+      <div class="img-bx">
+        <img src="camisa.png" />
+      </div>
+      <div class="content-bx">
+        <h3>Camisa Brand - Vermelha</h3>
+        <h2 class="price">R$39.<small>99</small></h2>
+        <a href="#" class="buy">Comprar</a>
+      </div>
+    </div>
+  </body>
+</html>
